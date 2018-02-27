@@ -1,5 +1,7 @@
 package kodman.re;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"OnCreate");
         setContentView(R.layout.activity_main);
+
+
+        FragmentTransaction fTrans = getFragmentManager().beginTransaction();
+        fTrans.add(R.id.frame,new LoginFragment(),"login");
+        fTrans.commit();
+/*
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PATH)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -40,6 +48,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG,"------------------Failure");
             }
         });
-
+*/
     }
 }
