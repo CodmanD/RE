@@ -10,11 +10,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import kodman.re.Constants.Constants;
+import kodman.re.Models.Product;
 import kodman.re.Models.ResponseLogin;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -73,24 +77,53 @@ final String TAG="LoginFragment";
         {
             case R.id.button:
 
-                smkApi.register(etName.getText().toString(),etPass.getText().toString()).enqueue(new Callback<ResponseLogin>() {
+/*
+                    smkApi.register(etName.getText().toString(),etPass.getText().toString()).enqueue(new Callback<ResponseLogin>() {
+                        @Override
+                        public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
+
+
+
+                            if(response.isSuccessful())
+                            {
+                                ResponseLogin rL=response.body();
+
+                                Log.d(TAG,"-----------------call="+call+"response = "+new Gson().toJson(response));
+                            }
+                            Log.d(TAG,"Response" +response.message());
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseLogin> call, Throwable t) {
+                            Log.d(TAG,"------------------Failure");
+                        }
+                    });
+*/
+
+                smkApi.getProduct().enqueue(new Callback<List<Product>>() {
                     @Override
-                    public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
+                    public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+
+
 
                         if(response.isSuccessful())
-                            {
-                                Log.d(TAG,"-----------------call="+"response = ");
-                            }
+                        {
+                            //ResponseLogin rL=response.body();
+
+                            for(Product p:response.body())
+                            Log.d(TAG,"-----------------call="+call+"response = "+p);
+                        }
                         Log.d(TAG,"Response" +response.message());
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseLogin> call, Throwable t) {
+                    public void onFailure(Call<List<Product>> call, Throwable t) {
                         Log.d(TAG,"------------------Failure");
                     }
                 });
+                Log.d(TAG,"Click Sign UP = "+etName.getText()+"/"+etPass.getText());
 break;
-            //Log.d(TAG,"Click Sign UP");
+
             case R.id.button2:
 
 
@@ -101,7 +134,7 @@ break;
                         if(response.isSuccessful())
 
                         {
-                            Log.d(TAG,"-----------------call="+call+"response = "+response.message());
+                            Log.d(TAG,"-----------------call="+call+"response = "+new Gson().toJson(response));
                         }
                         Log.d(TAG,"Response" +response.message());
                     }
@@ -110,6 +143,8 @@ break;
                     public void onFailure(Call<ResponseLogin> call, Throwable t) {
                         Log.d(TAG,"------------------Failure");
                     }
+
+
                 });
                 break;
         }

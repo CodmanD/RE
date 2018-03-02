@@ -38,8 +38,9 @@ public class Product  {
         return title;
     }
 
-    public void setTitle(String title) {
+    public Product setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getImage() {
@@ -56,5 +57,11 @@ public class Product  {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Product = "+id+" title:"+title+" /image:"+image+" /text"+text;
     }
 }

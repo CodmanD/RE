@@ -1,16 +1,27 @@
 package kodman.re;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import kodman.re.Constants.Constants;
 import kodman.re.Models.Product;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by dd on 25.02.2018.
@@ -18,26 +29,54 @@ import kodman.re.Models.Product;
 
 public class MyAdapter  extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
-    private List<Product> products;
+    private ArrayList<Product> products;
+    private Context context;
 
-    public MyAdapter(List<Product> products) {
+    public MyAdapter(Context context,ArrayList<Product> products)
+    {
+        this.context=context;
         this.products = products;
+    }
+
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
+
+
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Product post = products.get(position);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            //holder.post.setText(Html.fromHtml(post.getElementPureHtml(), Html.FROM_HTML_MODE_LEGACY));
-        } else {
-            //holder.post.setText(Html.fromHtml(post.getElementPureHtml()));
-        }
+        Product product = products.get(position);
+        Log.d(Constants.MAIN_TAG,"-------------"+product);
+        holder.tvTitle.setText(product.getTitle());
+                    Glide.with(context)
+                    .load(Constants.PATH_IMAGE+"img"+product.getId()+".png")
+                    .centerCrop()
+                    // .fitCenter()
+                    .into(holder.iv);
+                   holder.id=Integer.parseInt(product.getId());
+
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            //holder.post.setText(Html.fromHtml(post.getElementPureHtml(), Html.FROM_HTML_MODE_LEGACY));
+//                Log.d(Constants.MAIN_TAG," onBindHol;der");
+//
+//          //  Glide.with(context)
+//           //         .load(Constants.PATH_IMAGE+"img"+product.getId()+".png")
+//            //        .into(holder.iv);
+//
+//            holder.tvTitle.setText(product.getTitle());
+//        } else {
+//            //holder.post.setText(Html.fromHtml(post.getElementPureHtml()));
+//        }
        // holder.site.setText(post.getSite());
     }
 
@@ -49,13 +88,28 @@ public class MyAdapter  extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView post;
-        TextView site;
+
+        ImageView iv;
+        TextView tvTitle;
+        private int id;
+        private int position;
 
         public ViewHolder(View itemView) {
             super(itemView);
-        //    post = (TextView) itemView.findViewById(R.id.postitem_post);
-        //    site = (TextView) itemView.findViewById(R.id.postitem_site);
+            this.iv=  itemView.findViewById(R.id.ivSmallFoto);
+            this.tvTitle =itemView.findViewById(R.id.tvTitle);
+
+            Log.d("--------------------ViewHolder","ImageView"+iv);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Toast.makeText(context,"Open ID="+id,Toast.LENGTH_SHORT).show();
+                    Intent intent= new Intent(context,ScreenProduct.class);
+                    intent.putExtra("ID", id);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }
