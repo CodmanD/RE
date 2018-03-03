@@ -10,15 +10,17 @@
 
     <ImageView
         android:id="@+id/ivSmallFoto"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:background="@color/colorImageView"/>
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        />
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:textSize="20sp"
+        android:layout_weight="2"
         android:gravity="center"
         android:background="@color/colorTextView"
         />

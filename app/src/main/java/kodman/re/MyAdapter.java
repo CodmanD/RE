@@ -59,10 +59,11 @@ public class MyAdapter  extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         holder.tvTitle.setText(product.getTitle());
                     Glide.with(context)
                     .load(Constants.PATH_IMAGE+"img"+product.getId()+".png")
-                    .centerCrop()
-                    // .fitCenter()
+                    .thumbnail(0.5f)
+                    .fitCenter()
                     .into(holder.iv);
-                   holder.id=Integer.parseInt(product.getId());
+                    holder.position=position;
+
 
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -91,22 +92,25 @@ public class MyAdapter  extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
         ImageView iv;
         TextView tvTitle;
-        private int id;
         private int position;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.iv=  itemView.findViewById(R.id.ivSmallFoto);
             this.tvTitle =itemView.findViewById(R.id.tvTitle);
 
-            Log.d("--------------------ViewHolder","ImageView"+iv);
+            //Log.d("------------ViewHolder","ImageView"+iv);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(context,"Open ID="+id,Toast.LENGTH_SHORT).show();
+                    Product product= products.get(position);
+                    Toast.makeText(context,"Open ID="+product.getId(),Toast.LENGTH_SHORT).show();
                     Intent intent= new Intent(context,ScreenProduct.class);
-                    intent.putExtra("ID", id);
+                    intent.putExtra(Constants.ID, product.getId());
+                    intent.putExtra(Constants.TEXT, product.getText());
+                    intent.putExtra(Constants.TITLE, product.getTitle());
                     context.startActivity(intent);
                 }
             });

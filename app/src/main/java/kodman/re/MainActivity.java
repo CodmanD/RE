@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         final MyAdapter adapter=   new MyAdapter(this,products);
         //Log.d(TAG,"Rv = "+rv);
        rv.setAdapter(adapter);
-        Log.d(TAG,"-------------------Count ="+rv.getAdapter().getItemCount());
+     //  Log.d(TAG,"-------------------Count ="+rv.getAdapter().getItemCount());
 
 
         smkApi.getProduct().enqueue(new Callback<List<Product>>() {
@@ -80,11 +80,11 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                    // rv.setAdapter(new MyAdapter(MainActivity.this,products));
-                    Log.d(TAG,"-----------------count = "+rv.getAdapter().getItemCount());
+                  //  Log.d(TAG,"-----------------count = "+rv.getAdapter().getItemCount());
                    rv.getAdapter().notifyDataSetChanged();
 
                 }
-                Log.d(TAG,"Response" +response.message());
+              //  Log.d(TAG,"Response" +response.message());
             }
 
             @Override

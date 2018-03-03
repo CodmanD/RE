@@ -35,7 +35,7 @@ import retrofit2.Response;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 final String TAG="LoginFragment";
-
+/*
     @BindView(R.id.editText)
     EditText etName;
     @BindView(R.id.editText2)
@@ -46,7 +46,7 @@ final String TAG="LoginFragment";
     Button btnSignIn;
     Retrofit retrofit;
     SMK smkApi;
-
+*/
 
     @Nullable
     @Override
@@ -55,29 +55,34 @@ final String TAG="LoginFragment";
         View view=inflater.inflate(R.layout.login,container,false);
         //Log.d(TAG,"LLLL---------");
         ButterKnife.bind(view);
+      /*
         btnSignIn=view.findViewById(R.id.button2);
         btnSignUp=view.findViewById(R.id.button);
         etName=view.findViewById(R.id.editText);
         etPass=view.findViewById(R.id.editText2);
+
         btnSignIn.setOnClickListener(this);
         btnSignUp.setOnClickListener(this);
+
         retrofit=new Retrofit.Builder()
                 .baseUrl(Constants.PATH)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         smkApi=retrofit.create(SMK.class);
+        */
         return view;
     }
 
 
     @Override
     public void onClick(View v) {
-        switch(v.getId())
-        {
-            case R.id.button:
+        /*
+       // switch(v.getId())
 
-/*
+           // case R.id.button:
+
+
                     smkApi.register(etName.getText().toString(),etPass.getText().toString()).enqueue(new Callback<ResponseLogin>() {
                         @Override
                         public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
@@ -99,8 +104,9 @@ final String TAG="LoginFragment";
                         }
                     });
 */
+    }
 
-                smkApi.getProduct().enqueue(new Callback<List<Product>>() {
+           /*     smkApi.getProduct().enqueue(new Callback<List<Product>>() {
                     @Override
                     public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
 
@@ -147,6 +153,7 @@ break;
 
                 });
                 break;
-        }
-    }
+                */
+        //}
+  //  }
 }

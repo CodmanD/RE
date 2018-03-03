@@ -4,4 +4,9 @@
     <string name="user_password">Password</string>
     <string name="sing_up">sing up</string>
     <string name="sing_in">sing in</string>
+    <string name="review">Type your review...</string>
+    <string name="submit_review">Submit Review</string>
+    <string name="get_reviews">Read Reviews</string>
+    <string name="reviews">Reviews:</string>
+    <string name="back">Back</string>
 </resources>
