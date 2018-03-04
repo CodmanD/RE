@@ -1,23 +1,21 @@
 package kodman.re;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.google.gson.Gson;
-
-import java.util.List;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import kodman.re.Constants.Constants;
-import kodman.re.Models.Product;
 import kodman.re.Models.ResponseLogin;
 import kodman.re.Models.User;
 import retrofit2.Call;
@@ -26,11 +24,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by dd on 03.03.2018.
- */
-
-public class Activity_Login extends AppCompatActivity  implements View.OnClickListener{
+public class Activity_Login extends AppCompatActivity implements View.OnClickListener {
     @BindView(R.id.etName)
     EditText etName;
     @BindView(R.id.etPass)
@@ -45,93 +39,113 @@ public class Activity_Login extends AppCompatActivity  implements View.OnClickLi
 
     @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.login);
-        //return super.onCreateView(inflater, container, savedInstanceState);
-        //View view=inflater.inflate(R.layout.login,container,false);
-        //Log.d(TAG,"LLLL---------");
+
         ButterKnife.bind(this);
-        /*
-        btnSignIn=view.findViewById(R.id.button2);
-        btnSignUp=view.findViewById(R.id.button);
-        etName=view.findViewById(R.id.editText);
-        etPass=view.findViewById(R.id.editText2);
-        */
         btnIn.setOnClickListener(this);
         btnUp.setOnClickListener(this);
-        retrofit=new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.PATH)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        smkApi=retrofit.create(SMK.class);
-       // return view;
+        smkApi = retrofit.create(SMK.class);
+
     }
 
 
     @Override
     public void onClick(View v) {
-        switch(v.getId())
+
+        if(etName.getText().toString().equals(""))
         {
+            Toast.makeText(this,"Incorrect login",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        User user = new User(etName.getText().toString(), etPass.getText().toString());
+        final ProgressDialog dialog = ProgressDialog.show(this, "",
+                " Please wait...", true);
+        dialog.show();
+
+
+        switch (v.getId()) {
             case R.id.btnUp:
-
-                User user= new User();
-                user.setUsername(etName.getText().toString());
-                user.setPassword(etPass.getText().toString());
-                    smkApi.register(user).enqueue(new Callback<ResponseLogin>() {
-                        @Override
-                        public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
-
-
-
-                            if(response.isSuccessful())
-                            {
-                                ResponseLogin rL=response.body();
-
-                                Log.d(Constants.MAIN_TAG,"-----------------call="+call+"response = "+new Gson().toJson(response));
-
-                                Log.d(Constants.MAIN_TAG,rL.getToken());
-                            }
-                            Log.d(Constants.MAIN_TAG,"Response" +response.message());
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseLogin> call, Throwable t) {
-                            Log.d(Constants.MAIN_TAG,"------------------Failure");
-                        }
-                    });
-
-
-
-                Log.d(Constants.MAIN_TAG,"Click Sign UP = "+etName.getText()+"/"+etPass.getText());
-                break;
-
-            case R.id.btnIn:
-
-
-                smkApi.login(etName.getText().toString(),etPass.getText().toString()).enqueue(new Callback<ResponseLogin>() {
+                smkApi.register(user).enqueue(new Callback<ResponseLogin>() {
                     @Override
                     public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
 
-                        if(response.isSuccessful())
+                        dialog.dismiss();
+                        if (response.isSuccessful()) {
+                            ResponseLogin rL = response.body();
 
-                        {
-                            Log.d(Constants.MAIN_TAG,"-----------------call="+call+"response = "+new Gson().toJson(response));
-                        }
-                        Log.d(Constants.MAIN_TAG,"Response" +response.message());
+                            if (rL.isSuccess()) {
+                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString(Constants.TOKEN, rL.getToken());
+                                editor.commit();
+                                Intent intent = new Intent(Activity_Login.this, MainActivity.class);
+                                startActivity(intent);
+                            } else {
+                                etName.setError("Error");
+                                //etPass.setError("Error");
+                            }
+
+                        } else
+                            Toast.makeText(Activity_Login.this, response.message(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(Call<ResponseLogin> call, Throwable t) {
-                        Log.d(Constants.MAIN_TAG,"------------------Failure");
+                        //Log.e(Constants.MAIN_TAG, "------------------Failure");
+                        dialog.dismiss();
+                    }
+                });
+
+
+                Log.d(Constants.MAIN_TAG, "Click Sign UP = " + etName.getText() + "/" + etPass.getText());
+                break;
+
+            case R.id.btnIn:
+
+                smkApi.login(user).enqueue(new Callback<ResponseLogin>() {
+                    @Override
+                    public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()) {
+
+                            ResponseLogin rL = response.body();
+                            if (rL.isSuccess()) {
+                                saveTokenToPrefShared(rL.getToken());
+                                Intent intent = new Intent(Activity_Login.this, MainActivity.class);
+                                startActivity(intent);
+                            } else {
+                                etName.setError("Error");
+                                //etPass.setError("Error");
+                            }
+
+                        } else
+                            Toast.makeText(Activity_Login.this, response.message(), Toast.LENGTH_SHORT).show();
+
                     }
 
-
+                    @Override
+                    public void onFailure(Call<ResponseLogin> call, Throwable t) {
+                        //Log.e(Constants.MAIN_TAG, "------------------Failure");
+                        dialog.dismiss();
+                    }
                 });
                 break;
         }
     }
+
+    private void saveTokenToPrefShared(String token) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(Constants.TOKEN, token);
+        editor.commit();
+    }
+
 }
 

@@ -1,50 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <!--FrameLayout
 
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-    android:id="@+id/frame"
-    >
-    <android.support.v7.widget.RecyclerView
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rvProducts"
-
-        >
-
-    </android.support.v7.widget.RecyclerView>
-    </FrameLayout-->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <TextView
+    android:background="@color/colorScreenProductEditText"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarMain"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="Products"
-        />
+        android:layout_height="60dp"
+        android:background="?attr/colorPrimaryDark"
+        android:minHeight="?attr/actionBarSize"
+        app:subtitleTextColor="?attr/colorButtonNormal"
+        app:titleTextColor="?attr/colorButtonNormal" />
+
+
     <android.support.v7.widget.RecyclerView
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/rvProducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-        >
-
-    </android.support.v7.widget.RecyclerView>
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="end"
-    />
 </LinearLayout>
 
 

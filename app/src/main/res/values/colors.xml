@@ -5,4 +5,10 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorTextView">#a7d4f1</color>
     <color name="colorImageView">#f7f2b6</color>
+    <color name="colorStar">#002fff</color>
+    <color name="colorStarChoise">#ff1e12</color>
+    <color name="colorScreenProduct">#d3edff</color>
+    <color name="colorScreenProductEditText">#fff1c0</color>
+
+
 </resources>
